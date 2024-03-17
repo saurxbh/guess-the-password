@@ -53,8 +53,25 @@ def getWords():
             break # Found two words as required, total 5 words in words at this point, break out of loop
 
         randomWord = getOneWordExcept(words)
-        if 
+        if numMatchingLetters(secretPassword, randomWord) == 3:
+            words.append(randomWord)
 
+    # Find at least seven words that have at least one matching letter (but give up at 500 tries if not enough can be found)
+    for i in range(500):
+        if len(words) == 12:
+            break # Found seven words, break out of the loop
+
+        randomWord = getOneWordExcept(words)
+        if numMatchingLetters(secretPassword, randomWord) != 0:
+            words.append(randomWord)
+
+    # Add any random words needed to get 12 words total
+    while len(words) < 12:
+        randomWord = getOneWordExcept(words)
+        words.append(randomWord)
+
+    assert len(words) == 12
+    return words
 
 
 def main():
