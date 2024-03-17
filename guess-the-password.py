@@ -23,6 +23,15 @@ def getOneWordExcept(blocklist=None):
             return randomWord
 
 
+def numMatchingLetters(word1, word2):
+    '''Return the number of matching letters in these two words'''
+    matches = 0
+    for i in range(len(word1)):
+        if word1[i] == word2[i]:
+            matches += 1
+    return matches
+
+
 def getWords():
     '''Return a list of 12 words that could possibly be the password.
     The secret password will be the first word in the list. To make the game fair, 
@@ -35,6 +44,16 @@ def getWords():
     # We us '< 3' because the secret password is already in words
     while len(words) < 3:
         randomWord = getOneWordExcept(words)
+        if numMatchingLetters(secretPassword, randomWord) == 0:
+            words.append(randomWord)
+
+    # Find two words that have 3 matching letters (but give up at 500 tries if not enough can be found)
+    for i in range(500):
+        if len(words) == 5:
+            break # Found two words as required, total 5 words in words at this point, break out of loop
+
+        randomWord = getOneWordExcept(words)
+        if 
 
 
 
