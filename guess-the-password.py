@@ -144,7 +144,13 @@ as their 2nd and 3rd letter. You get four guesses.\n''')
     # Start at 4 tries remaining, going down
     for triesRemaining in range(4, 0, -1):
         playerMove = askForPlayerGuess(gameWords, triesRemaining)
-
+        if playerMove == secretPassword:
+            print('A C C E S S   G R A N T E D')
+            return
+        else:
+            numMatches = numMatchingLetters(secretPassword, playerMove)
+            print('Access denied ({}/7 correct)'.format(numMatches))
+    print('Out of tries. Secret password was {}.'.format(secretPassword))
 
 if __name__ == '__main__':
     try:
