@@ -90,7 +90,7 @@ def getComputerMemoryString(words):
         rightHalf = ''
         for j in range(16): # Each half line has 16 characters
             leftHalf += random.choice(GARBAGE_CHARS)
-            rightHalf += random.choices(GARBAGE_CHARS)
+            rightHalf += random.choice(GARBAGE_CHARS)
 
         # Fill in the password from words
         if lineNum in linesWithWords:
@@ -106,16 +106,25 @@ def getComputerMemoryString(words):
             rightHalf = rightHalf[:insertionIndex] + words[nextWord] + rightHalf[insertionIndex + 7:]
             nextWord += 1 # Update the word to put in the half line
 
-        computerMemory.append('0x' + hex(memoryAddress).zfill(4)
-                              + '  ' + leftHalf + '    ' + 
-                              + '0x' + hex(memoryAddress + 16*16).zfill(4)
+        computerMemory.append('0x' + hex(memoryAddress)[2:].zfill(4)
+                              + '  ' + leftHalf + '    ' 
+                              + '0x' + hex(memoryAddress + 16*16)[2:].zfill(4)
                               + '  ' + rightHalf)
         memoryAddress += 16 # Jump from, say, 0xe680 to 0xe690
 
-        # Each string in the computerMemory list is joined into one large string to return
-        return '\n'.join(computerMemory)
+    # Each string in the computerMemory list is joined into one large string to return
+    return '\n'.join(computerMemory)
 
 
+def askForPlayerGuess(words, tries):
+    '''Let the player enter a password guess'''
+    while True:
+        print('Enter password: ({} tries remaining)'.format(tries))
+        guess = input('> ').upper()
+        if guess in words:
+            return guess
+        print('That is not one of the possible passwords listed above.')
+        print('Try entering "{}" or "{}"'.format(words[0],words[1]))
 
 def main():
     print('''
@@ -129,6 +138,12 @@ as their 2nd and 3rd letter. You get four guesses.\n''')
     gameWords = getWords()
     # The 'computer memory' is just cosmetic, but it looks cool
     computerMemory = getComputerMemoryString(gameWords)
+    secretPassword = random.choice(gameWords)
+
+    print(computerMemory)
+    # Start at 4 tries remaining, going down
+    for triesRemaining in range(4, 0, -1):
+        playerMove = askForPlayerGuess(gameWords, triesRemaining)
 
 
 if __name__ == '__main__':
